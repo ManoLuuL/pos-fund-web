@@ -28,37 +28,52 @@ class PatientController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+       $data = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:patients',
             'birth_date' => 'required|date',
         ]);
 
-        return Patient::create($request->all());
+        $patient = $this->patientService->create($data);
+
+        return response()->json([
+            'success' => true,
+            'data' => $patient,
+            'message' => 'Patient created.'
+        ], Response::HTTP_CREATED);
     }
 
-    public function show(Patient $patient)
+    public function show(int $id)
     {
-        return $patient;
+       $patient = $this->patientService->find($id);
+        return response()->json([
+            'success' => true,
+            'data' => $patient,
+            'message' => 'Patient found.'
+        ], Response::HTTP_OK);
     }
 
-    public function update(Request $request, Patient $patient)
+    public function update(Request $request, int $id)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'sometimes|required',
-            'email' => 'sometimes|required|email|unique:patients,email,' . $patient->id,
+            'email' => 'sometimes|required|email|unique:patients,email,' . $id,
             'birth_date' => 'sometimes|required|date',
         ]);
 
-        $patient->update($request->all());
+        $patient= $this->patientService->update($data, $id);
 
-        return $patient;
+        return response()->json([
+            'success' => true,
+            'data' => $patient,
+            'message' => 'Patient updated.'
+        ], Response::HTTP_OK);
     }
 
-    public function destroy(Patient $patient)
+    public function destroy(int $id)
     {
-        $patient->delete();
+        $this->patientService->delete($id);
 
-        return response()->noContent();
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }
