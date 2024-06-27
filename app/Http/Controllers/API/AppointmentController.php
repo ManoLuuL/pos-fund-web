@@ -1,52 +1,66 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Appointment;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Services\AppointmentService;
 
 class AppointmentController extends Controller
 {
+    protected $appointmentService;
+
+    public function __construct(AppointmentService $appointmentService)
+    {
+        $this->appointmentService = $appointmentService;
+    }
+
     public function index()
     {
-        return Appointment::with(['patient', 'doctor'])->get();
+        $appointments = $this->appointmentService->getAllAppointments();
+        return response()->json($appointments);
+    }
+
+    public function show($id)
+    {
+        $appointment = $this->appointmentService->getAppointmentById($id);
+        return response()->json($appointment);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'patient_id' => 'required|exists:patients,id',
             'doctor_id' => 'required|exists:doctors,id',
             'appointment_date' => 'required|date',
             'notes' => 'nullable|string',
         ]);
 
-        return Appointment::create($request->all());
+        $appointment = $this->appointmentService->createAppointment($data);
+        return response()->json([
+            'success' => true,
+            'data' => $appointment,
+            'message' => 'appointment created.'
+        ], Response::HTTP_CREATED);
     }
 
-    public function show(Appointment $appointment)
+    public function update(Request $request, $id)
     {
-        return $appointment->load(['patient', 'doctor']);
-    }
-
-    public function update(Request $request, Appointment $appointment)
-    {
-        $request->validate([
+        $data = $request->validate([
             'patient_id' => 'sometimes|required|exists:patients,id',
             'doctor_id' => 'sometimes|required|exists:doctors,id',
             'appointment_date' => 'sometimes|required|date',
             'notes' => 'nullable|string',
         ]);
 
-        $appointment->update($request->all());
-
-        return $appointment;
+        $appointment = $this->appointmentService->updateAppointment($id, $data);
+        return response()->json($appointment);
     }
 
-    public function destroy(Appointment $appointment)
+    public function destroy($id)
     {
-        $appointment->delete();
-
-        return response()->noContent();
+        $this->appointmentService->deleteAppointment($id);
+        return response()->json(null, 204);
     }
 }
