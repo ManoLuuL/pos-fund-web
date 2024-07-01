@@ -2,7 +2,7 @@
 
 namespace App\Interface;
 
-interface PatientRepositoryInternface
+interface PatientRepositoryInterface
 {
     public function all();
     public function create(array $data);

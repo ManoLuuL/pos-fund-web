@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
-use App\Interface\PatientRepositoryInternface;
+use App\Interface\PatientRepositoryInterface;
 use App\Models\Patient;
 
-class PatientRepository implements PatientRepositoryInternface
+class PatientRepository implements PatientRepositoryInterface
 {
     public function all() {
         return  Patient::all();

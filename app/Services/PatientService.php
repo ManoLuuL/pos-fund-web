@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Interface\PatientRepositoryInternface;
+use App\Interface\PatientRepositoryInterface;
 
 class PatientService
 {
     public function __construct(
-        protected PatientRepositoryInternface $patientRepository
+        protected PatientRepositoryInterface $patientRepository
     ) {
     }
 
