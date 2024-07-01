@@ -21,6 +21,20 @@ Este projeto é uma aplicação de gerenciamento de consultas médicas. Ele perm
 ### Back-end
 - Laravel: Framework PHP para desenvolvimento de aplicações web.
 
+# Instalação
+## Back-end
+- Clone o projeto `git clone https://github.com/seu-usuario/projeto-gerenciamento-consultas.git`
+  `cd projeto-gerenciamento-consultas`
+- Instale as dependências do Laravel
+- Configure o arquivo .env com as informações do seu banco de dados.
+- Execute as migrações para configurar o banco de dados
+- Inicie o servidor Laravel `php artisan serve`
+
+## Front-end
+- Navegue até o diretório frontend: `cd frontend`
+- Instale as dependências do projeto: `npm install`
+- Inicie o servidor de desenvolvimento: `npm run dev`
+
 # Licença
 Este projeto está licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
